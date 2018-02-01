@@ -1,0 +1,17 @@
+find_package(Doxygen REQUIRED)
+
+set(DOXYGEN_FULL_PATH_NAMES NO)
+set(DOXYGEN_GENERATE_HTML YES)
+set(DOXYGEN_GENERATE_LATEX NO)
+set(DOXYGEN_GENERATE_MAN NO)
+set(DOXYGEN_JAVADOC_AUTOBRIEF YES)
+set(DOXYGEN_OPTIMIZE_OUTPUT_FOR_C YES)
+set(DOXYGEN_PROJECT_NAME libpitw)
+set(DOXYGEN_QUIET YES)
+
+doxygen_add_docs(docs
+                 "${CMAKE_SOURCE_DIR}/include"
+                 "${CMAKE_BINARY_DIR}/include")
+
+install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/html/"
+        DESTINATION share/doc/pitw/html)

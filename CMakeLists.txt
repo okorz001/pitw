@@ -1,0 +1,52 @@
+cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
+
+project(PITW VERSION 1.0.0 LANGUAGES C)
+
+option(PITW_SHARED_LIB "Build pitw as a shared library?" ON)
+option(PITW_ENABLE_DOCS "Build pitw documentation?" ON)
+option(PITW_ENABLE_TESTS "Build pitw tests?" ON)
+
+include(cmake/build_types.cmake)
+include(cmake/compiler.cmake)
+include(cmake/install.cmake)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+
+if(PITW_SHARED_LIB)
+  set(PITW_TYPE SHARED)
+  if(MSVC)
+    set(PITW_DLL 1)
+  else()
+    set(PITW_DLL 0)
+  endif()
+else()
+  set(PITW_TYPE STATIC)
+endif()
+message(STATUS "Building library type: ${PITW_TYPE}")
+
+configure_file("${CMAKE_SOURCE_DIR}/cmake/config.h.in"
+               "${CMAKE_BINARY_DIR}/include/pitw/config.h"
+               @ONLY)
+
+add_library(pitw ${PITW_TYPE}
+            src/ref.c
+            src/version.c)
+set_property(TARGET pitw PROPERTY VERSION ${PROJECT_VERSION})
+set_property(TARGET pitw PROPERTY SOVERSION ${PROJECT_VERSION_MAJOR})
+target_include_directories(pitw PUBLIC
+                           $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
+                           $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
+                           $<INSTALL_INTERFACE:include>)
+if(PITW_DLL)
+  target_compile_definitions(pitw PRIVATE PITW_EXPORTS)
+endif()
+
+install_targets2(pitw)
+install_headers("${CMAKE_SOURCE_DIR}/include/"
+                "${CMAKE_BINARY_DIR}/include/")
+
+if(PITW_ENABLE_DOCS)
+  include(cmake/docs.cmake)
+endif()
+if(PITW_ENABLE_TESTS)
+  add_subdirectory(test)
+endif()

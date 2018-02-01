@@ -1,0 +1,49 @@
+#ifndef PITW_CONFIG_H
+#define PITW_CONFIG_H
+
+/**
+ * @file
+ * This header contains information about this particular build of pitw.
+ * The contents of this header are programmatically generated during the build.
+ */
+
+/**
+ * The full version string suitable for printing.
+ */
+#define PITW_VERSION_STRING "@PROJECT_VERSION@"
+
+/**
+ * The major version number.
+ */
+#define PITW_VERSION_MAJOR @PROJECT_VERSION_MAJOR@
+
+/**
+ * The minor version number.
+ */
+#define PITW_VERSION_MINOR @PROJECT_VERSION_MINOR@
+
+/**
+ * The patch version number.
+ */
+#define PITW_VERSION_PATCH @PROJECT_VERSION_PATCH@
+
+/**
+ * Is pitw built as a DLL?
+ */
+#cmakedefine PITW_DLL
+
+/**
+ * @def PITW_API
+ * An exported function that is part of pitw's external API.
+ */
+#ifdef PITW_DLL
+#  if PITW_EXPORTS
+#    define PITW_API __declspec(dllexport)
+#  else
+#    define PITW_API __declspec(dllimport)
+#  endif
+#else
+#  define PITW_API
+#endif
+
+#endif /* PITW_CONFIG_H */
