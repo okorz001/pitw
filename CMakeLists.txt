@@ -10,6 +10,7 @@ include(cmake/build_types.cmake)
 include(cmake/compiler.cmake)
 include(cmake/features.cmake)
 include(cmake/install.cmake)
+include(cmake/output.cmake)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 if(PITW_SHARED_LIB)
