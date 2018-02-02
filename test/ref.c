@@ -1,18 +1,14 @@
-#include <string.h>
-
 #include "common.h"
 
-static char *str = NULL;
+/* This value doesn't matter because we won't actually free it */
+static char *str = "zzz";
 static int deallocated = 0;
 static void cb(void *arg) {
     ck_assert_ptr_eq(arg, str);
-    free(arg);
     deallocated = 1;
 }
 
 START_TEST(ref_dealloc) {
-    str = _strdup("Hello world!");
-
     pitw_ref *ref = pitw_ref_create(str, cb);
     ck_assert(!deallocated);
 

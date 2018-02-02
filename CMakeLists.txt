@@ -8,6 +8,7 @@ option(PITW_ENABLE_TESTS "Build pitw tests?" ON)
 
 include(cmake/build_types.cmake)
 include(cmake/compiler.cmake)
+include(cmake/features.cmake)
 include(cmake/install.cmake)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
@@ -38,6 +39,23 @@ target_include_directories(pitw PUBLIC
                            $<INSTALL_INTERFACE:include>)
 if(PITW_DLL)
   target_compile_definitions(pitw PRIVATE PITW_EXPORTS)
+endif()
+
+# Atomic support is an implementation detail.
+if(PITW_HAS_C11_ATOMIC)
+  message(STATUS "Using atomics: C11 stdatomic.h")
+  target_compile_definitions(pitw PRIVATE PITW_HAS_C11_ATOMIC)
+elseif(PITW_HAS_GCC_ATOMIC)
+  message(STATUS "Using atomics: GCC __atomic builtins")
+  target_compile_definitions(pitw PRIVATE PITW_HAS_GCC_ATOMIC)
+elseif(PITW_HAS_GCC_SYNC)
+  message(STATUS "Using atomics: GCC __sync builtins")
+  target_compile_definitions(pitw PRIVATE PITW_HAS_GCC_SYNC)
+elseif(PITW_HAS_WIN32_INTERLOCKED)
+  message(STATUS "Using atomics: Windows Interlocked API")
+  target_compile_definitions(pitw PRIVATE PITW_HAS_WIN32_INTERLOCKED)
+else()
+  message(SEND_ERROR "No atomic support")
 endif()
 
 install_targets2(pitw)
