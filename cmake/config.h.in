@@ -28,22 +28,34 @@
 #define PITW_VERSION_PATCH @PROJECT_VERSION_PATCH@
 
 /**
- * Is pitw built as a DLL?
+ * Is pitw built as a shared library?
  */
-#cmakedefine PITW_DLL
+#cmakedefine PITW_SHARED
 
 /**
  * @def PITW_API
  * An exported function that is part of pitw's external API.
  */
-#ifdef PITW_DLL
-#  if PITW_EXPORTS
-#    define PITW_API __declspec(dllexport)
-#  else
-#    define PITW_API __declspec(dllimport)
+/**
+ * @def PITW_PRIVATE
+ * An internal function that should not be called outside of pitw.
+ */
+#ifdef PITW_SHARED
+#  ifdef _WIN32
+#    ifdef PITW_EXPORTS
+#      define PITW_API __declspec(dllexport)
+#      define PITW_PRIVATE
+#    else
+#      define PITW_API __declspec(dllimport)
+#      define PITW_PRIVATE
+#    endif
+#  elif __GNUC__ >= 4
+#    define PITW_API __attribute__((visibility("default")))
+#    define PITW_PRIVATE __attribute__((visibility("hidden")))
 #  endif
 #else
 #  define PITW_API
+#  define PITW_PRIVATE
 #endif
 
 #endif /* PITW_CONFIG_H */

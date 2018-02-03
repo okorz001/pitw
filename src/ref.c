@@ -20,12 +20,12 @@ pitw_ref *pitw_ref_create(void *ptr, void (*dealloc)(void *)) {
 }
 
 pitw_ref *pitw_ref_up(pitw_ref *ref) {
-    pitw_atomic_inc(ref->count);
+    if (ref) pitw_atomic_inc(ref->count);
     return ref;
 }
 
 void pitw_ref_down(pitw_ref *ref) {
-    if (!pitw_atomic_dec(ref->count)) {
+    if (ref && !pitw_atomic_dec(ref->count)) {
         ref->dealloc(ref->ptr);
         /* help catch use after free */
         ref->ptr = NULL;

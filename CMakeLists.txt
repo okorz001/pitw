@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
 
 project(PITW VERSION 1.0.0 LANGUAGES C)
 
-option(PITW_SHARED_LIB "Build pitw as a shared library?" ON)
+option(PITW_SHARED "Build pitw as a shared library?" ON)
 option(PITW_ENABLE_DOCS "Build pitw documentation?" ON)
 option(PITW_ENABLE_TESTS "Build pitw tests?" ON)
 
@@ -13,13 +13,8 @@ include(cmake/install.cmake)
 include(cmake/output.cmake)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
-if(PITW_SHARED_LIB)
+if(PITW_SHARED)
   set(PITW_TYPE SHARED)
-  if(MSVC)
-    set(PITW_DLL 1)
-  else()
-    set(PITW_DLL 0)
-  endif()
 else()
   set(PITW_TYPE STATIC)
 endif()
@@ -38,9 +33,7 @@ target_include_directories(pitw PUBLIC
                            $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
                            $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
                            $<INSTALL_INTERFACE:include>)
-if(PITW_DLL)
-  target_compile_definitions(pitw PRIVATE PITW_EXPORTS)
-endif()
+target_compile_definitions(pitw PRIVATE PITW_EXPORTS)
 
 # Atomic support is an implementation detail.
 if(PITW_HAS_C11_ATOMIC)

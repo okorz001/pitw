@@ -83,7 +83,22 @@ PITW_API pitw_ref *pitw_ref_up(pitw_ref *ref);
 PITW_API void pitw_ref_down(pitw_ref *ref);
 
 /**
- * A convenience macro for setting a #pitw_ref to another.
+ * A convenience macro for clearing a #pitw_ref pointer.
+ * This is functionally equivalent to the following:
+ * @code
+ * pitw_ref_down(ref);
+ * ref = NULL;
+ * @endcode
+ * @param ref The reference to clear.
+ */
+#define pitw_ref_clear(ref) \
+    do { \
+        pitw_ref_down(ref); \
+        ref = NULL; \
+    } while(0)
+
+/**
+ * A convenience macro for setting a #pitw_ref pointer to another #pitw_ref.
  * This is functionally equivalent to the following:
  * @code
  * pitw_ref_down(ref);
@@ -96,7 +111,7 @@ PITW_API void pitw_ref_down(pitw_ref *ref);
     do { \
         pitw_ref *temp = ref; \
         ref = pitw_ref_up(other); \
-        pitw_ref_down(other); \
+        pitw_ref_down(temp); \
     } while(0)
 
 /**
