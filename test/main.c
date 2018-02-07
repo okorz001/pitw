@@ -4,6 +4,7 @@ int main(void) {
     Suite *suite = suite_create("pitw");
     /* add test cases below */
     suite_add_tcase(suite, create_ref_tcase());
+    suite_add_tcase(suite, create_seq_tcase());
     suite_add_tcase(suite, create_version_tcase());
 
     SRunner *runner = srunner_create(suite);

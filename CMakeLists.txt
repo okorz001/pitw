@@ -25,7 +25,9 @@ configure_file("${CMAKE_SOURCE_DIR}/cmake/config.h.in"
                @ONLY)
 
 add_library(pitw ${PITW_TYPE}
+            src/mem.c
             src/ref.c
+            src/seq.c
             src/version.c)
 set_property(TARGET pitw PROPERTY VERSION ${PROJECT_VERSION})
 set_property(TARGET pitw PROPERTY SOVERSION ${PROJECT_VERSION_MAJOR})

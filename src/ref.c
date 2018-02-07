@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "pitw/mem.h"
 #include "pitw/ref.h"
 #include "atomic.h"
 
@@ -11,7 +12,7 @@ struct pitw_ref {
 };
 
 pitw_ref *pitw_ref_create(void *ptr, void (*dealloc)(void *)) {
-    pitw_ref *ref = malloc(sizeof(*ref));
+    pitw_ref *ref = pitw_mem_alloc(sizeof(*ref));
     ref->count = 1;
     /* if no user function is provided, just use free */
     ref->dealloc = dealloc ? dealloc : free;
@@ -29,7 +30,7 @@ void pitw_ref_down(pitw_ref *ref) {
         ref->dealloc(ref->ptr);
         /* help catch use after free */
         ref->ptr = NULL;
-        free(ref);
+        pitw_mem_free(ref);
     }
 }
 
