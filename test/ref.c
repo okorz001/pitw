@@ -13,6 +13,8 @@ START_TEST(ref_get) {
 
     pitw_ref *ref = pitw_ref_create(p, cb);
     ck_assert_ptr_eq(pitw_ref_get(ref), p);
+
+    pitw_ref_down(ref);
 }
 END_TEST
 

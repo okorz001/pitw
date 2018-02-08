@@ -4,6 +4,7 @@ add_executable(pitw_tests
                main.c
                ref.c
                seq.c
+               util.c
                version.c)
 target_link_libraries(pitw_tests pitw Check::check)
 

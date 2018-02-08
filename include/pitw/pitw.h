@@ -11,6 +11,7 @@
 #include <pitw/mem.h>
 #include <pitw/ref.h>
 #include <pitw/seq.h>
+#include <pitw/util.h>
 #include <pitw/version.h>
 
 /**

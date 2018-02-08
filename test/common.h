@@ -7,6 +7,7 @@
 
 TCase *create_ref_tcase(void);
 TCase *create_seq_tcase(void);
+TCase *create_util_tcase(void);
 TCase *create_version_tcase(void);
 
 #endif  /* PITW_TEST_COMMON_H */

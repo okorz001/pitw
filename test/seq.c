@@ -7,6 +7,9 @@ START_TEST(seq_from_array) {
     pitw_seq *seq = pitw_seq_from_array(arr);
     ck_assert_ptr_nonnull(seq);
 
+    /* TODO: this sucks */
+    pitw_seq *head = seq;
+
     ptr = pitw_seq_first(seq);
     ck_assert_int_eq(*ptr, 1);
 
@@ -24,6 +27,8 @@ START_TEST(seq_from_array) {
 
     seq = pitw_seq_rest(seq);
     ck_assert_ptr_null(seq);
+
+    pitw_seq_down(head);
 }
 END_TEST
 
