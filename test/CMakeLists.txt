@@ -1,6 +1,7 @@
 find_package(Check REQUIRED)
 
 add_executable(pitw_tests
+               hash.c
                main.c
                ref.c
                seq.c

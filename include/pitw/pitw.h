@@ -8,6 +8,7 @@
 
 #include <pitw/config.h>
 
+#include <pitw/hash.h>
 #include <pitw/mem.h>
 #include <pitw/ref.h>
 #include <pitw/seq.h>

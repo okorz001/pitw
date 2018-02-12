@@ -25,6 +25,7 @@ configure_file("${CMAKE_SOURCE_DIR}/cmake/config.h.in"
                @ONLY)
 
 add_library(pitw ${PITW_TYPE}
+            src/hash.c
             src/mem.c
             src/ref.c
             src/seq.c
