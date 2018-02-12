@@ -25,6 +25,25 @@ typedef struct pitw_hash pitw_hash;
 typedef size_t (*pitw_hash_fn)(char *key);
 
 /**
+ * Configuration options for hash tables.
+ */
+typedef struct {
+    /**
+     * The starting size of the hash table.
+     */
+    size_t size;
+    /**
+     * The maximum load factor (occupancy) for the hash table, expressed as a
+     * percentage.
+     */
+    int max_load;
+    /**
+     * The hash function for the hash table.
+     */
+    pitw_hash_fn hash_fn;
+} pitw_hash_options;
+
+/**
  * Creates a new hash table with default parameters.
  * @return An empty hash table.
  */
@@ -32,11 +51,10 @@ PITW_API pitw_hash *pitw_hash_create(void);
 
 /**
  * Creates a new hash table.
- * @param size The starting size of the hash table.
- * @param hash_fn The hash function.
+ * @param options Configuration for the new hash table.
  * @return An empty hash table.
  */
-PITW_API pitw_hash *pitw_hash_create_custom(size_t size, pitw_hash_fn hash_fn);
+PITW_API pitw_hash *pitw_hash_create_custom(pitw_hash_options *options);
 
 /**
  * Frees a hash table.

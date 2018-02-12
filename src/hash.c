@@ -3,6 +3,7 @@
 #include <string.h>
 
 #define DEFAULT_SIZE 16
+#define DEFAULT_MAX_LOAD 75
 
 struct cell {
     char *key;
@@ -22,6 +23,7 @@ struct pitw_hash {
     struct cell *cells;
     size_t size;
     size_t used;
+    int max_load;
 };
 
 static int get_load(pitw_hash *hash) {
@@ -65,7 +67,8 @@ static struct cell *get_write_cell(pitw_hash *hash, char *key) {
 }
 
 pitw_hash *pitw_hash_create(void) {
-    return pitw_hash_create_custom(0, NULL);
+    pitw_hash_options options = {0};
+    return pitw_hash_create_custom(&options);
 }
 
 static size_t default_hash_fn(char *key) {
@@ -76,12 +79,13 @@ static size_t default_hash_fn(char *key) {
     return hash;
 }
 
-pitw_hash *pitw_hash_create_custom(size_t size, pitw_hash_fn hash_fn) {
+pitw_hash *pitw_hash_create_custom(pitw_hash_options *options) {
     pitw_hash *hash = pitw_mem_alloc(sizeof(*hash));
-    hash->hash_fn = hash_fn ? hash_fn : default_hash_fn;
-    hash->size = size > 0 ? size : DEFAULT_SIZE;
+    hash->hash_fn = options->hash_fn ? options->hash_fn : default_hash_fn;
+    hash->size = options->size > 0 ? options->size : DEFAULT_SIZE;
     hash->cells = pitw_mem_alloc_zero(hash->size * sizeof(hash->cells[0]));
     hash->used = 0;
+    hash->max_load = options->max_load > 0 ? options->max_load : DEFAULT_MAX_LOAD;
     return hash;
 }
 
@@ -127,6 +131,9 @@ void pitw_hash_set(pitw_hash *hash, char *key, void *val) {
         /* insert into empty cell */
         cell->key = key;
         hash->used++;
+        /* check load */
+        if (get_load(hash) > hash->max_load)
+            resize(hash, hash->size * 2);
     }
 }
 

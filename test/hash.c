@@ -48,7 +48,9 @@ static size_t fake_hash(char *key) {
 }
 
 START_TEST(collision) {
-    pitw_hash *hash = pitw_hash_create_custom(0, fake_hash);
+    pitw_hash_options options = {0};
+    options.hash_fn = fake_hash;
+    pitw_hash *hash = pitw_hash_create_custom(&options);
 
     int i = 46;
     pitw_hash_set(hash, "foo", &i);
@@ -66,7 +68,9 @@ START_TEST(collision) {
 END_TEST
 
 START_TEST(resize) {
-    pitw_hash *hash = pitw_hash_create_custom(2, NULL);
+    pitw_hash_options options = {0};
+    options.size = 2;
+    pitw_hash *hash = pitw_hash_create_custom(&options);
 
     char *keys[] = {"a", "b", "c"};
     int vals[] = {1, 2, 3};
@@ -75,8 +79,8 @@ START_TEST(resize) {
         pitw_hash_set(hash, keys[i], &vals[i]);
     }
 
-    for (int i = 0; i < 3; ++i) {
-        ck_assert_ptr_eq(pitw_hash_get(hash, keys[i]), &vals[i]);
+    for (int j = 0; j < 3; ++j) {
+        ck_assert_ptr_eq(pitw_hash_get(hash, keys[j]), &vals[j]);
     }
 
     pitw_hash_free(hash);
