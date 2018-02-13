@@ -10,6 +10,7 @@
 
 #include <pitw/hash.h>
 #include <pitw/mem.h>
+#include <pitw/obj.h>
 #include <pitw/ref.h>
 #include <pitw/seq.h>
 #include <pitw/util.h>

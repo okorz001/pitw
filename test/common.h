@@ -6,6 +6,7 @@
 #include <stdlib.h>
 
 TCase *create_hash_tcase(void);
+TCase *create_obj_tcase(void);
 TCase *create_ref_tcase(void);
 TCase *create_seq_tcase(void);
 TCase *create_util_tcase(void);

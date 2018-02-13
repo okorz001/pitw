@@ -34,6 +34,7 @@ int main(void) {
     Suite *suite = suite_create("pitw");
     /* add test cases below */
     add_tcase(suite, create_hash_tcase());
+    add_tcase(suite, create_obj_tcase());
     add_tcase(suite, create_ref_tcase());
     add_tcase(suite, create_seq_tcase());
     add_tcase(suite, create_util_tcase());
